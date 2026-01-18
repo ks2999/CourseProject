@@ -8,9 +8,13 @@ import com.example.users.model.User;
 import com.example.users.repository.SubmissionRepository;
 import com.example.users.repository.TaskRepository;
 import com.example.users.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,17 +23,23 @@ import java.util.stream.Collectors;
 @Transactional
 public class SubmissionService {
     
+    private static final Logger log = LoggerFactory.getLogger(SubmissionService.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    
     private final SubmissionRepository submissionRepository;
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final StudentProgressService studentProgressService;
+    private final CodeExecutionService codeExecutionService;
     
     public SubmissionService(SubmissionRepository submissionRepository, UserRepository userRepository,
-                           TaskRepository taskRepository, StudentProgressService studentProgressService) {
+                           TaskRepository taskRepository, StudentProgressService studentProgressService,
+                           CodeExecutionService codeExecutionService) {
         this.submissionRepository = submissionRepository;
         this.userRepository = userRepository;
         this.taskRepository = taskRepository;
         this.studentProgressService = studentProgressService;
+        this.codeExecutionService = codeExecutionService;
     }
     
     public SubmissionResponse submitSolution(SubmissionRequest request, UUID userId) {
@@ -63,6 +73,9 @@ public class SubmissionService {
         if (testResult.errorMessage != null) {
             submission.setErrorMessage(testResult.errorMessage);
         }
+        
+        log.info("Проверка кода завершена: статус={}, тестов пройдено={}/{}", 
+                testResult.status, testResult.testsPassed, testResult.testsTotal);
         
         // Начисляем опыт только если решение принято и XP еще не начислен
         if (testResult.status == Submission.Status.PASSED && !submission.getXpAwarded()) {
@@ -125,49 +138,233 @@ public class SubmissionService {
             );
         }
         
-        // Проверка на наличие основных элементов C кода
-        String codeLower = code.toLowerCase();
-        boolean hasMain = codeLower.contains("main") || codeLower.contains("int main");
-        boolean hasBasicSyntax = code.contains("{") && code.contains("}");
-        
-        if (!hasMain && !hasBasicSyntax) {
+        // Проверяем наличие GCC компилятора
+        if (!isGccAvailable()) {
+            log.error("GCC не найден! Установите GCC для проверки кода.");
             return new TestResult(
                 Submission.Status.ERROR,
                 0,
                 0,
-                "Код должен содержать функцию main или базовый синтаксис C",
+                "GCC компилятор не найден. Установите GCC для проверки кода:\n" +
+                "macOS: brew install gcc\n" +
+                "Linux: sudo apt-get install gcc",
                 null
             );
         }
         
-        // TODO: Реальная проверка кода через компилятор и тесты
-        // Пока симулируем проверку - если код выглядит валидным, считаем что прошел
-        // В реальной системе здесь должен быть вызов компилятора и запуск тестов
-        
-        // Симуляция: 80% шанс что код правильный (для демонстрации)
-        boolean passed = Math.random() > 0.2 || code.length() > 50;
-        
-        if (passed) {
-            int totalTests = 10;
-            int passedTests = totalTests;
+        try {
+            // Реальная проверка кода через компилятор
+            CodeExecutionService.CodeCheckResult result = 
+                codeExecutionService.checkCode(code, testCases);
+            
+            if (!result.compilationSuccess) {
+                // Fallback: показываем хотя бы один тест с ошибкой компиляции
+                try {
+                    List<FallbackTestCase> fallbackTests = parseTestCasesForFallback(testCases);
+                    if (!fallbackTests.isEmpty()) {
+                        FallbackTestCase firstTest = fallbackTests.get(0);
+                        String errorJson = String.format(
+                            "{\"tests\":[{\"testNumber\":1,\"passed\":false,\"input\":\"%s\",\"expected\":\"%s\",\"actual\":\"\",\"error\":\"Ошибка компиляции:\\n%s\"}]}",
+                            escapeJson(firstTest.input),
+                            escapeJson(firstTest.expectedOutput),
+                            escapeJson(result.compilationError)
+                        );
+                        
+                        return new TestResult(
+                            Submission.Status.ERROR,
+                            0,
+                            1,
+                            "Ошибка компиляции:\n" + result.compilationError,
+                            errorJson
+                        );
+                    }
+                } catch (Exception e) {
+                    log.error("Ошибка при создании fallback для ошибки компиляции", e);
+                }
+                
+                return new TestResult(
+                    Submission.Status.ERROR,
+                    0,
+                    0,
+                    "Ошибка компиляции:\n" + result.compilationError,
+                    null
+                );
+            }
+            
+            if (result.testsTotal == 0) {
+                // Fallback: показываем хотя бы один тест
+                try {
+                    List<FallbackTestCase> fallbackTests = parseTestCasesForFallback(testCases);
+                    if (!fallbackTests.isEmpty()) {
+                        FallbackTestCase firstTest = fallbackTests.get(0);
+                        String errorJson = String.format(
+                            "{\"tests\":[{\"testNumber\":1,\"passed\":false,\"input\":\"%s\",\"expected\":\"%s\",\"actual\":\"\",\"error\":\"Тестовые случаи не найдены или не удалось их распарсить\"}]}",
+                            escapeJson(firstTest.input),
+                            escapeJson(firstTest.expectedOutput)
+                        );
+                        
+                        return new TestResult(
+                            Submission.Status.ERROR,
+                            0,
+                            1,
+                            "Тестовые случаи не найдены",
+                            errorJson
+                        );
+                    }
+                } catch (Exception e) {
+                    log.error("Ошибка при создании fallback", e);
+                }
+                
+                return new TestResult(
+                    Submission.Status.ERROR,
+                    0,
+                    0,
+                    "Тестовые случаи не найдены",
+                    null
+                );
+            }
+            
+            // Формируем JSON с результатами тестов
+            String testResultsJson = buildTestResultsJson(result.testResults);
+            
+            Submission.Status status = result.testsPassed == result.testsTotal 
+                ? Submission.Status.PASSED 
+                : Submission.Status.FAILED;
+            
+            String errorMessage = status == Submission.Status.FAILED
+                ? String.format("Пройдено %d из %d тестов", result.testsPassed, result.testsTotal)
+                : null;
+            
             return new TestResult(
-                Submission.Status.PASSED,
-                passedTests,
-                totalTests,
-                null,
-                "{\"message\": \"Все тесты пройдены успешно\"}"
+                status,
+                result.testsPassed,
+                result.testsTotal,
+                errorMessage,
+                testResultsJson
             );
-        } else {
-            int totalTests = 10;
-            int passedTests = (int)(Math.random() * 7) + 1; // 1-7 тестов пройдено
+            
+        } catch (Exception e) {
+            log.error("Ошибка при проверке кода", e);
+            
+            // Fallback: показываем хотя бы один тест с информацией об ошибке
+            try {
+                List<FallbackTestCase> fallbackTests = parseTestCasesForFallback(testCases);
+                if (!fallbackTests.isEmpty()) {
+                    FallbackTestCase firstTest = fallbackTests.get(0);
+                    String errorJson = String.format(
+                        "{\"tests\":[{\"testNumber\":1,\"passed\":false,\"input\":\"%s\",\"expected\":\"%s\",\"actual\":\"\",\"error\":\"Ошибка системы: %s\"}]}",
+                        escapeJson(firstTest.input),
+                        escapeJson(firstTest.expectedOutput),
+                        escapeJson(e.getMessage())
+                    );
+                    
+                    return new TestResult(
+                        Submission.Status.ERROR,
+                        0,
+                        1,
+                        "Ошибка системы при проверке кода: " + e.getMessage(),
+                        errorJson
+                    );
+                }
+            } catch (Exception fallbackError) {
+                log.error("Ошибка при создании fallback результата", fallbackError);
+            }
+            
             return new TestResult(
-                Submission.Status.FAILED,
-                passedTests,
-                totalTests,
-                "Некоторые тесты не пройдены. Проверьте логику вашего решения.",
-                "{\"message\": \"Пройдено " + passedTests + " из " + totalTests + " тестов\"}"
+                Submission.Status.ERROR,
+                0,
+                0,
+                "Ошибка системы при проверке кода: " + e.getMessage(),
+                null
             );
         }
+    }
+    
+    /**
+     * Проверяет доступность GCC компилятора
+     */
+    private boolean isGccAvailable() {
+        try {
+            Process process = new ProcessBuilder("gcc", "--version").start();
+            boolean finished = process.waitFor(2, java.util.concurrent.TimeUnit.SECONDS);
+            if (finished && process.exitValue() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            // GCC не найден
+        }
+        return false;
+    }
+    
+    /**
+     * Парсит тестовые случаи для fallback (простая версия)
+     */
+    private List<FallbackTestCase> parseTestCasesForFallback(String testCasesJson) {
+        List<FallbackTestCase> testCases = new ArrayList<>();
+        
+        try {
+            com.fasterxml.jackson.databind.JsonNode root = objectMapper.readTree(testCasesJson);
+            com.fasterxml.jackson.databind.JsonNode tests = root.get("tests");
+            
+            if (tests != null && tests.isArray()) {
+                for (com.fasterxml.jackson.databind.JsonNode test : tests) {
+                    String input = test.has("input") ? test.get("input").asText() : "";
+                    String output = test.has("output") ? test.get("output").asText() : "";
+                    testCases.add(new FallbackTestCase(input, output));
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Не удалось распарсить тестовые случаи для fallback", e);
+        }
+        
+        return testCases;
+    }
+    
+    private static class FallbackTestCase {
+        final String input;
+        final String expectedOutput;
+        
+        FallbackTestCase(String input, String expectedOutput) {
+            this.input = input;
+            this.expectedOutput = expectedOutput;
+        }
+    }
+    
+    /**
+     * Формирует JSON с результатами тестов
+     */
+    private String buildTestResultsJson(List<CodeExecutionService.TestExecutionResult> testResults) {
+        try {
+            StringBuilder json = new StringBuilder("{\"tests\":[");
+            for (int i = 0; i < testResults.size(); i++) {
+                CodeExecutionService.TestExecutionResult tr = testResults.get(i);
+                if (i > 0) json.append(",");
+                json.append("{")
+                    .append("\"testNumber\":").append(i + 1).append(",")
+                    .append("\"passed\":").append(tr.passed).append(",")
+                    .append("\"input\":\"").append(escapeJson(tr.input)).append("\",")
+                    .append("\"expected\":\"").append(escapeJson(tr.expectedOutput)).append("\",")
+                    .append("\"actual\":\"").append(escapeJson(tr.actualOutput)).append("\"");
+                if (tr.errorMessage != null) {
+                    json.append(",\"error\":\"").append(escapeJson(tr.errorMessage)).append("\"");
+                }
+                json.append("}");
+            }
+            json.append("]}");
+            return json.toString();
+        } catch (Exception e) {
+            log.error("Ошибка формирования JSON результатов", e);
+            return "{\"error\":\"Ошибка формирования результатов\"}";
+        }
+    }
+    
+    private String escapeJson(String str) {
+        if (str == null) return "";
+        return str.replace("\\", "\\\\")
+                  .replace("\"", "\\\"")
+                  .replace("\n", "\\n")
+                  .replace("\r", "\\r")
+                  .replace("\t", "\\t");
     }
     
     // Вспомогательный класс для результатов тестирования

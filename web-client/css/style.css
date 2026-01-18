@@ -614,6 +614,15 @@ main {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
+.lesson-modal {
+    max-width: 1000px;
+}
+
+.lesson-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
 .modal-close {
     position: absolute;
     right: 20px;
@@ -633,6 +642,244 @@ main {
     line-height: 1.8;
     color: var(--dark-color);
     white-space: pre-wrap;
+}
+
+/* Стили для форматированного контента урока */
+.lesson-content-formatted {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 20px;
+    line-height: 1.8;
+    color: var(--dark-color);
+}
+
+.lesson-content-formatted h1 {
+    color: var(--primary-color);
+    font-size: 2em;
+    margin: 20px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.lesson-content-formatted h2 {
+    color: var(--primary-color);
+    font-size: 1.6em;
+    margin: 25px 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--light-color);
+}
+
+.lesson-content-formatted h3 {
+    color: var(--secondary-color);
+    font-size: 1.3em;
+    margin: 20px 0 12px 0;
+    font-weight: 600;
+}
+
+.lesson-content-formatted p {
+    margin: 12px 0;
+    text-align: justify;
+}
+
+.lesson-content-formatted strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.lesson-content-formatted em {
+    color: #666;
+    font-style: italic;
+}
+
+/* Блоки кода */
+.lesson-content-formatted pre.code-block {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 20px 0;
+    border-left: 4px solid var(--secondary-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.lesson-content-formatted pre.code-block code {
+    font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9em;
+    line-height: 1.6;
+    display: block;
+    white-space: pre;
+}
+
+/* Инлайн код */
+.lesson-content-formatted code.inline-code {
+    background: #f4f4f4;
+    color: #e83e8c;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    border: 1px solid #e0e0e0;
+}
+
+/* Подсветка синтаксиса */
+.lesson-content-formatted .keyword {
+    color: #569cd6;
+    font-weight: 600;
+}
+
+.lesson-content-formatted .string {
+    color: #ce9178;
+}
+
+.lesson-content-formatted .comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.lesson-content-formatted .number {
+    color: #b5cea8;
+}
+
+.lesson-content-formatted .function {
+    color: #dcdcaa;
+}
+
+/* Списки */
+.lesson-content-formatted ul,
+.lesson-content-formatted ol {
+    margin: 15px 0;
+    padding-left: 30px;
+}
+
+.lesson-content-formatted ul {
+    list-style-type: disc;
+}
+
+.lesson-content-formatted ol {
+    list-style-type: decimal;
+}
+
+.lesson-content-formatted li {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+.lesson-content-formatted ul ul,
+.lesson-content-formatted ol ol {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* Блоки с важной информацией */
+.lesson-content-formatted blockquote {
+    border-left: 4px solid var(--warning-color);
+    background: #fff3cd;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+    font-style: italic;
+}
+
+/* Заголовок урока в модальном окне */
+.lesson-header-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--light-color);
+}
+
+.lesson-header-section h2 {
+    margin: 0 0 10px 0;
+    color: var(--primary-color);
+    font-size: 2em;
+}
+
+.lesson-topic-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-color), #667eea);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-top: 10px;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.lesson-header-section h2 {
+    border: none;
+    padding: 0;
+}
+
+/* Улучшения для блоков кода */
+.lesson-content-formatted pre.code-block {
+    position: relative;
+}
+
+.lesson-content-formatted pre.code-block::before {
+    content: 'C';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #888;
+    font-size: 0.8em;
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+/* Улучшения для списков */
+.lesson-content-formatted ul li::marker {
+    color: var(--primary-color);
+}
+
+.lesson-content-formatted ol li::marker {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Блоки с важной информацией */
+.lesson-content-formatted blockquote {
+    border-left: 4px solid var(--warning-color);
+    background: linear-gradient(90deg, #fff3cd 0%, #fff9e6 100%);
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+    font-style: italic;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Улучшения для параграфов */
+.lesson-content-formatted p:first-of-type {
+    margin-top: 0;
+}
+
+/* Улучшенное модальное окно для уроков */
+.lesson-modal {
+    max-width: 900px;
+    max-height: 90vh;
+}
+
+.lesson-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.lesson-content-formatted::-webkit-scrollbar {
+    width: 8px;
+}
+
+.lesson-content-formatted::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.lesson-content-formatted::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.lesson-content-formatted::-webkit-scrollbar-thumb:hover {
+    background: #357abd;
 }
 
 .modal-footer {

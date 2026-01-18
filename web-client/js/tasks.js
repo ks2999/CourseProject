@@ -208,9 +208,23 @@ function displayTestResults(submission) {
     
     let html = '';
     
+    // Парсим детальные результаты тестов
+    let detailedTests = [];
+    if (submission.testResults) {
+        try {
+            const results = JSON.parse(submission.testResults);
+            if (results.tests && Array.isArray(results.tests)) {
+                detailedTests = results.tests;
+            }
+        } catch (e) {
+            console.error('Ошибка парсинга результатов тестов:', e);
+        }
+    }
+    
+    // Общий статус
     if (submission.status === 'PASSED') {
         html = `
-            <div class="test-result-item passed">
+            <div class="test-summary passed">
                 <div class="test-result-header">
                     <span class="test-result-name">✅ Все тесты пройдены!</span>
                     <span class="test-result-status passed">ПРОЙДЕНО</span>
@@ -222,32 +236,31 @@ function displayTestResults(submission) {
         `;
     } else if (submission.status === 'FAILED') {
         html = `
-            <div class="test-result-item failed">
+            <div class="test-summary failed">
                 <div class="test-result-header">
                     <span class="test-result-name">❌ Тесты не пройдены</span>
                     <span class="test-result-status failed">НЕ ПРОЙДЕНО</span>
                 </div>
                 <div class="test-result-message">
                     Пройдено тестов: ${submission.testsPassed || 0} / ${submission.testsTotal || 0}
-                    ${submission.errorMessage ? '<br>Ошибка: ' + submission.errorMessage : ''}
                 </div>
             </div>
         `;
     } else if (submission.status === 'ERROR') {
         html = `
-            <div class="test-result-item error">
+            <div class="test-summary error">
                 <div class="test-result-header">
                     <span class="test-result-name">⚠️ Ошибка компиляции</span>
                     <span class="test-result-status failed">ОШИБКА</span>
                 </div>
                 <div class="test-result-message">
-                    ${submission.errorMessage || 'Ошибка при выполнении кода'}
+                    <pre style="white-space: pre-wrap; background: #f8d7da; padding: 10px; border-radius: 5px; margin-top: 10px;">${escapeHtml(submission.errorMessage || 'Ошибка при выполнении кода')}</pre>
                 </div>
             </div>
         `;
     } else {
         html = `
-            <div class="test-result-item">
+            <div class="test-summary">
                 <div class="test-result-header">
                     <span class="test-result-name">⏳ На проверке</span>
                     <span class="test-result-status pending">ОЖИДАНИЕ</span>
@@ -256,7 +269,61 @@ function displayTestResults(submission) {
         `;
     }
     
+    // Детальные результаты каждого теста
+    if (detailedTests.length > 0) {
+        html += '<div class="detailed-tests"><h4>Детальные результаты тестов:</h4>';
+        
+        // Если есть ошибка и только один тест - показываем только его
+        const showOnlyOne = (submission.status === 'ERROR' && detailedTests.length === 1);
+        const testsToShow = showOnlyOne ? detailedTests.slice(0, 1) : detailedTests;
+        
+        testsToShow.forEach((test, index) => {
+            const testClass = test.passed ? 'passed' : 'failed';
+            html += `
+                <div class="test-detail-item ${testClass}">
+                    <div class="test-detail-header">
+                        <span class="test-number">Тест ${test.testNumber || (index + 1)}</span>
+                        <span class="test-status ${testClass}">${test.passed ? '✅ ПРОЙДЕН' : '❌ НЕ ПРОЙДЕН'}</span>
+                    </div>
+                    <div class="test-detail-content">
+                        <div class="test-io">
+                            <strong>Входные данные:</strong>
+                            <pre>${escapeHtml(test.input || '(пусто)')}</pre>
+                        </div>
+                        <div class="test-io">
+                            <strong>Ожидаемый вывод:</strong>
+                            <pre>${escapeHtml(test.expected || '(пусто)')}</pre>
+                        </div>
+                        <div class="test-io">
+                            <strong>Полученный вывод:</strong>
+                            <pre>${escapeHtml(test.actual || '(пусто)')}</pre>
+                        </div>
+                        ${test.error ? `
+                        <div class="test-error">
+                            <strong>Ошибка:</strong>
+                            <pre>${escapeHtml(test.error)}</pre>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (showOnlyOne && detailedTests.length > 1) {
+            html += `<div class="test-info-note">Показан только первый тест из-за ошибки системы. Всего тестов: ${detailedTests.length}</div>`;
+        }
+        
+        html += '</div>';
+    }
+    
     testResultsContent.innerHTML = html;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Загрузка истории решений

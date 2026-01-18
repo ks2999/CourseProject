@@ -85,15 +85,20 @@ async function openLesson(lessonId) {
     try {
         const lesson = await lessonApi.getById(lessonId);
         
+        // Парсим markdown содержимое
+        const contentHtml = parseMarkdown(lesson.content || lesson.description || 'Содержимое урока отсутствует');
+        
         // Создаем модальное окно с содержимым урока
         const modal = document.createElement('div');
         modal.className = 'modal';
         modal.innerHTML = `
-            <div class="modal-content">
+            <div class="modal-content lesson-modal">
                 <span class="modal-close" onclick="this.closest('.modal').remove()">&times;</span>
-                <h2>${lesson.title}</h2>
-                ${lesson.topic ? `<div class="lesson-topic">Тема: ${lesson.topic}</div>` : ''}
-                <div class="lesson-content">${lesson.content || lesson.description || 'Содержимое урока отсутствует'}</div>
+                <div class="lesson-header-section">
+                    <h2>${lesson.title}</h2>
+                    ${lesson.topic ? `<div class="lesson-topic-badge">${lesson.topic}</div>` : ''}
+                </div>
+                <div class="lesson-content-formatted">${contentHtml}</div>
                 <div class="modal-footer">
                     <button onclick="this.closest('.modal').remove()" class="btn btn-primary">Закрыть</button>
                     <a href="tasks.html?lesson=${lesson.id}" class="btn btn-secondary">Перейти к задачам</a>
@@ -101,8 +106,37 @@ async function openLesson(lessonId) {
             </div>
         `;
         document.body.appendChild(modal);
+        
+        // Подсветка синтаксиса для блоков кода
+        highlightCodeBlocks(modal);
     } catch (error) {
         showMessage('Ошибка при загрузке урока: ' + error.message, 'error');
     }
+}
+
+// Подсветка синтаксиса кода (простая версия)
+function highlightCodeBlocks(container) {
+    const codeBlocks = container.querySelectorAll('pre.code-block code');
+    codeBlocks.forEach(block => {
+        let code = block.textContent;
+        
+        // Простая подсветка для C
+        code = code
+            // Ключевые слова
+            .replace(/\b(int|char|float|double|void|if|else|for|while|do|return|break|continue|switch|case|default|struct|typedef|enum|static|const|extern|volatile|register|signed|unsigned|long|short|sizeof|include|define|ifdef|ifndef|endif)\b/g, 
+                '<span class="keyword">$1</span>')
+            // Строки
+            .replace(/"([^"]*)"/g, '<span class="string">"$1"</span>')
+            .replace(/'([^']*)'/g, '<span class="string">\'$1\'</span>')
+            // Комментарии
+            .replace(/\/\/.*$/gm, '<span class="comment">$&</span>')
+            .replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>')
+            // Числа
+            .replace(/\b(\d+\.?\d*)\b/g, '<span class="number">$1</span>')
+            // Функции
+            .replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g, '<span class="function">$1</span>');
+        
+        block.innerHTML = code;
+    });
 }
 
