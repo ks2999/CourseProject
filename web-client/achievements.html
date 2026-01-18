@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Достижения - Платформа обучения</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Платформа обучения программированию</h1>
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="profile.html">Профиль</a>
+                <a href="progress.html">Прогресс</a>
+                <a href="lessons.html">Уроки</a>
+                <a href="tasks.html">Задачи</a>
+                <a href="achievements.html" class="active">Достижения</a>
+                <button onclick="logout()">Выйти</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="achievements-section">
+                <h2>Мои достижения</h2>
+                
+                <div id="badges-grid" class="badges-grid">
+                    <!-- Бейджи будут загружены динамически -->
+                    <p class="loading">Загрузка достижений...</p>
+                </div>
+
+                <div class="leaderboard-section">
+                    <h3>Лидерборд</h3>
+                    <div id="leaderboard" class="leaderboard">
+                        <!-- Лидерборд будет загружен динамически -->
+                    </div>
+                </div>
+            </section>
+
+            <div id="message" class="message" style="display: none;"></div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/achievements.js"></script>
+</body>
+</html>
+

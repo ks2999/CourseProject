@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задачи - Платформа обучения</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/code-editor.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Платформа обучения программированию</h1>
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="profile.html">Профиль</a>
+                <a href="progress.html">Прогресс</a>
+                <a href="lessons.html">Уроки</a>
+                <a href="tasks.html" class="active">Задачи</a>
+                <a href="achievements.html">Достижения</a>
+                <button onclick="logout()">Выйти</button>
+            </nav>
+        </header>
+
+        <main>
+            <div class="tasks-layout">
+                <!-- Список задач -->
+                <aside class="tasks-sidebar">
+                    <h2>Задачи</h2>
+                    <div class="tasks-filter">
+                        <select id="difficulty-filter">
+                            <option value="">Все сложности</option>
+                            <option value="EASY">Легкие</option>
+                            <option value="MEDIUM">Средние</option>
+                            <option value="HARD">Сложные</option>
+                            <option value="EXPERT">Экспертные</option>
+                        </select>
+                    </div>
+                    <div id="tasks-list" class="tasks-list">
+                        <p class="loading">Загрузка задач...</p>
+                    </div>
+                </aside>
+
+                <!-- Область решения задачи -->
+                <section class="task-workspace">
+                    <div id="no-task-selected" class="no-task-selected">
+                        <h2>Выберите задачу из списка</h2>
+                        <p>Выберите задачу слева, чтобы начать её решение</p>
+                    </div>
+
+                    <div id="task-content" style="display: none;">
+                        <!-- Информация о задаче -->
+                        <div class="task-header">
+                            <h2 id="task-title">Название задачи</h2>
+                            <div class="task-meta">
+                                <span class="task-difficulty" id="task-difficulty">EASY</span>
+                                <span class="task-xp">⭐ <span id="task-xp-reward">10</span> XP</span>
+                            </div>
+                        </div>
+
+                        <div class="task-description">
+                            <h3>Описание</h3>
+                            <div id="task-description-text"></div>
+                        </div>
+
+                        <!-- Редактор кода -->
+                        <div class="code-editor-section">
+                            <div class="editor-header">
+                                <h3>Ваше решение</h3>
+                                <button onclick="resetCode()" class="btn btn-secondary">Сбросить</button>
+                            </div>
+                            <textarea id="code-editor" class="code-editor" placeholder="Напишите ваш код здесь..."></textarea>
+                        </div>
+
+                        <!-- Кнопка отправки -->
+                        <div class="submit-section">
+                            <button onclick="submitSolution()" class="btn btn-primary btn-large">Отправить решение</button>
+                        </div>
+
+                        <!-- Результаты тестов -->
+                        <div id="test-results" class="test-results" style="display: none;">
+                            <h3>Результаты проверки</h3>
+                            <div id="test-results-content"></div>
+                        </div>
+
+                        <!-- История решений -->
+                        <div class="submissions-history">
+                            <h3>Мои решения</h3>
+                            <div id="submissions-list" class="submissions-list">
+                                <!-- Решения будут загружены динамически -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="message" class="message" style="display: none;"></div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/tasks.js"></script>
+</body>
+</html>
+

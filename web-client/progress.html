@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогресс - Платформа обучения</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Платформа обучения программированию</h1>
+            <nav>
+                <a href="index.html">Главная</a>
+                <a href="profile.html">Профиль</a>
+                <a href="progress.html" class="active">Прогресс</a>
+                <a href="lessons.html">Уроки</a>
+                <a href="tasks.html">Задачи</a>
+                <a href="achievements.html">Достижения</a>
+                <button onclick="logout()">Выйти</button>
+            </nav>
+        </header>
+
+        <main>
+            <section class="progress-section">
+                <h2>Мой прогресс</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-value" id="total-xp">0</div>
+                        <div class="stat-label">Общий опыт</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value" id="level">1</div>
+                        <div class="stat-label">Уровень</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-value" id="current-streak">0</div>
+                        <div class="stat-label">Текущая серия</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="max-streak">0</div>
+                        <div class="stat-label">Максимальная серия</div>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <h3>Прогресс до следующего уровня</h3>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="level-progress">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">0 / 100 XP</div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="tasks-completed">0</div>
+                        <div class="stat-label">Решено задач</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-value" id="lessons-completed">0</div>
+                        <div class="stat-label">Пройдено уроков</div>
+                    </div>
+                </div>
+
+                <div class="skills-section">
+                    <h3>Навыки</h3>
+                    <div id="skills-list" class="skills-list">
+                        <!-- Навыки будут загружены динамически -->
+                    </div>
+                </div>
+            </section>
+
+            <div id="message" class="message" style="display: none;"></div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/progress.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Платформа обучения программированию</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Платформа обучения программированию</h1>
+            <nav id="nav">
+                <a href="index.html" class="active">Главная</a>
+                <a href="profile.html" id="profile-link" style="display: none;">Профиль</a>
+                <a href="progress.html" id="progress-link" style="display: none;">Прогресс</a>
+                <a href="lessons.html" id="lessons-link" style="display: none;">Уроки</a>
+                <a href="tasks.html" id="tasks-link" style="display: none;">Задачи</a>
+                <a href="achievements.html" id="achievements-link" style="display: none;">Достижения</a>
+                <button id="logout-btn" style="display: none;" onclick="logout()">Выйти</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Форма регистрации -->
+            <section id="register-section" class="auth-section">
+                <h2>Регистрация</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-name">Имя:</label>
+                        <input type="text" id="reg-name" required minlength="2" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email:</label>
+                        <input type="email" id="reg-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Пароль:</label>
+                        <input type="password" id="reg-password" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </form>
+                <p class="toggle-auth">Уже есть аккаунт? <a href="#" onclick="showLogin(); return false;">Войти</a></p>
+            </section>
+
+            <!-- Форма входа -->
+            <section id="login-section" class="auth-section" style="display: none;">
+                <h2>Вход</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email:</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Пароль:</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </form>
+                <p class="toggle-auth">Нет аккаунта? <a href="#" onclick="showRegister(); return false;">Зарегистрироваться</a></p>
+            </section>
+
+            <!-- Сообщения об ошибках/успехе -->
+            <div id="message" class="message" style="display: none;"></div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
+
