@@ -1,0 +1,381 @@
+/* Стили для редактора кода и задач */
+
+.tasks-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    min-height: 600px;
+}
+
+.tasks-sidebar {
+    background: var(--light-color);
+    border-radius: 12px;
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.tasks-sidebar h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.tasks-filter {
+    margin-bottom: 15px;
+}
+
+.tasks-filter select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.task-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow);
+}
+
+.task-item.selected {
+    border-left-color: var(--secondary-color);
+    background: #e8f5e9;
+}
+
+.task-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.task-item-title {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.task-item-difficulty {
+    font-size: 0.85em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.task-item-difficulty.easy {
+    background: #d4edda;
+    color: #155724;
+}
+
+.task-item-difficulty.medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.task-item-difficulty.hard {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.task-item-difficulty.expert {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.task-item-xp {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.task-workspace {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.no-task-selected {
+    text-align: center;
+    padding: 100px 20px;
+    color: #666;
+}
+
+.no-task-selected h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.task-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--light-color);
+}
+
+.task-header h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.task-meta {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.task-difficulty {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+.task-difficulty.easy {
+    background: #d4edda;
+    color: #155724;
+}
+
+.task-difficulty.medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.task-difficulty.hard {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.task-difficulty.expert {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.task-xp {
+    color: var(--warning-color);
+    font-weight: 600;
+}
+
+.task-description {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: var(--light-color);
+    border-radius: 8px;
+}
+
+.task-description h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.task-description-text {
+    line-height: 1.6;
+    color: var(--dark-color);
+}
+
+.code-editor-section {
+    margin-bottom: 25px;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.editor-header h3 {
+    color: var(--primary-color);
+}
+
+.code-editor {
+    width: 100%;
+    min-height: 400px;
+    padding: 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Courier New', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    background: #f8f9fa;
+    color: var(--dark-color);
+}
+
+.code-editor:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+}
+
+.submit-section {
+    margin-bottom: 25px;
+}
+
+.btn-large {
+    padding: 15px 40px;
+    font-size: 18px;
+}
+
+.test-results {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: var(--light-color);
+    border-radius: 8px;
+}
+
+.test-results h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.test-result-item {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border-left: 4px solid;
+}
+
+.test-result-item.passed {
+    background: #d4edda;
+    border-left-color: var(--secondary-color);
+}
+
+.test-result-item.failed {
+    background: #f8d7da;
+    border-left-color: var(--danger-color);
+}
+
+.test-result-item.error {
+    background: #fff3cd;
+    border-left-color: var(--warning-color);
+}
+
+.test-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.test-result-name {
+    font-weight: 600;
+}
+
+.test-result-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.test-result-status.passed {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.test-result-status.failed {
+    background: var(--danger-color);
+    color: white;
+}
+
+.test-result-message {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.submissions-history {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--light-color);
+}
+
+.submissions-history h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.submissions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.submission-item {
+    padding: 15px;
+    background: var(--light-color);
+    border-radius: 8px;
+    border-left: 4px solid var(--border-color);
+}
+
+.submission-item.passed {
+    border-left-color: var(--secondary-color);
+}
+
+.submission-item.failed {
+    border-left-color: var(--danger-color);
+}
+
+.submission-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.submission-date {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.submission-status {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.submission-status.passed {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.submission-status.failed {
+    background: var(--danger-color);
+    color: white;
+}
+
+.submission-status.pending {
+    background: var(--warning-color);
+    color: white;
+}
+
+.submission-stats {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .tasks-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .tasks-sidebar {
+        max-height: 300px;
+    }
+}
+
