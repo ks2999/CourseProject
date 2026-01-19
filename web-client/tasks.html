@@ -26,7 +26,12 @@
             <div class="tasks-layout">
                 <!-- Список задач -->
                 <aside class="tasks-sidebar">
-                    <h2>Задачи</h2>
+                    <div class="tasks-header">
+                        <h2>Задачи</h2>
+                        <button id="create-task-btn" class="btn btn-primary btn-small" style="display: none;" onclick="openCreateTaskModal()">
+                            + Создать задачу
+                        </button>
+                    </div>
                     <div class="tasks-filter">
                         <select id="difficulty-filter">
                             <option value="">Все сложности</option>
@@ -98,9 +103,77 @@
         </main>
     </div>
 
+    <!-- Модальное окно для создания задачи -->
+    <div id="create-task-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Создать новую задачу</h2>
+                <button class="modal-close" onclick="closeCreateTaskModal()">&times;</button>
+            </div>
+            <form id="create-task-form" onsubmit="createTask(event)">
+                <div class="form-group">
+                    <label for="task-title-input">Название задачи *</label>
+                    <input type="text" id="task-title-input" required maxlength="255">
+                </div>
+                <div class="form-group">
+                    <label for="task-description-input">Описание</label>
+                    <textarea id="task-description-input" rows="5" maxlength="2000"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-code-template">Шаблон кода</label>
+                    <textarea id="task-code-template" rows="10" class="code-input" placeholder="#include <stdio.h>&#10;&#10;int main() {&#10;    // Ваш код здесь&#10;    return 0;&#10;}"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-difficulty-select">Сложность *</label>
+                        <select id="task-difficulty-select" required>
+                            <option value="EASY">Легкая</option>
+                            <option value="MEDIUM">Средняя</option>
+                            <option value="HARD">Сложная</option>
+                            <option value="EXPERT">Экспертная</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-xp-reward">Опыт за решение</label>
+                        <input type="number" id="task-xp-reward" min="1" value="10">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-lesson-select">Урок (опционально)</label>
+                        <select id="task-lesson-select">
+                            <option value="">Не выбран</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-skill-select">Навык (опционально)</label>
+                        <select id="task-skill-select">
+                            <option value="">Не выбран</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="task-test-cases">Тесты (JSON) *</label>
+                    <textarea id="task-test-cases" rows="8" required placeholder='{"tests": [{"input": "5", "output": "15"}, {"input": "10", "output": "55"}]}'></textarea>
+                    <small>Формат: {"tests": [{"input": "...", "output": "..."}, ...]}</small>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="task-published"> Опубликовать сразу
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeCreateTaskModal()">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Создать задачу</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/tasks.js"></script>
+    <script src="js/task-create.js"></script>
 </body>
 </html>
 

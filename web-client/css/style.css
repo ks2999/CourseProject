@@ -90,14 +90,22 @@ main {
 
 /* Формы */
 .auth-section {
-    max-width: 400px;
-    margin: 0 auto;
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 40px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(74, 144, 226, 0.1);
 }
 
 .auth-section h2 {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     color: var(--primary-color);
     text-align: center;
+    font-size: 2em;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(74, 144, 226, 0.1);
 }
 
 .form-group {
@@ -113,16 +121,25 @@ main {
 
 .form-group input {
     width: 100%;
-    padding: 12px;
+    padding: 14px 16px;
     border: 2px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 16px;
-    transition: border-color 0.3s;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .form-group input:focus {
     outline: none;
     border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-group input::placeholder {
+    color: #999;
+    opacity: 0.7;
 }
 
 .btn {
@@ -171,6 +188,19 @@ main {
 
 .toggle-auth a:hover {
     text-decoration: underline;
+    color: #357abd;
+}
+
+/* Улучшенные стили для форм авторизации */
+.auth-section .form-group input {
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.auth-section .btn {
+    margin-top: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 /* Сообщения */
@@ -212,13 +242,68 @@ main {
     text-align: center;
 }
 
+.avatar-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
 .avatar {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid var(--primary-color);
-    margin-bottom: 15px;
+    display: block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+.avatar-container:hover .avatar {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.avatar-container:hover .avatar-overlay {
+    opacity: 1;
+}
+
+.avatar-upload-btn {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9em;
+    cursor: pointer;
+    padding: 8px 16px;
+    background: rgba(74, 144, 226, 0.9);
+    border-radius: 20px;
+    transition: background 0.3s ease;
+}
+
+.avatar-upload-btn:hover {
+    background: rgba(74, 144, 226, 1);
+}
+
+.avatar-hint {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
 }
 
 .profile-info {
@@ -648,37 +733,68 @@ main {
 .lesson-content-formatted {
     max-height: 70vh;
     overflow-y: auto;
-    padding: 20px;
-    line-height: 1.8;
+    padding: 30px;
+    line-height: 2;
     color: var(--dark-color);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 12px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .lesson-content-formatted h1 {
     color: var(--primary-color);
-    font-size: 2em;
-    margin: 20px 0 15px 0;
-    padding-bottom: 10px;
-    border-bottom: 3px solid var(--primary-color);
+    font-size: 2.2em;
+    margin: 25px 0 20px 0;
+    padding: 15px 0 15px 20px;
+    border-left: 5px solid var(--primary-color);
+    background: linear-gradient(90deg, rgba(74, 144, 226, 0.1) 0%, transparent 100%);
+    border-radius: 8px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(74, 144, 226, 0.1);
 }
 
 .lesson-content-formatted h2 {
     color: var(--primary-color);
-    font-size: 1.6em;
-    margin: 25px 0 15px 0;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--light-color);
+    font-size: 1.8em;
+    margin: 30px 0 18px 0;
+    padding: 12px 0 12px 15px;
+    border-left: 4px solid var(--primary-color);
+    background: linear-gradient(90deg, rgba(74, 144, 226, 0.08) 0%, transparent 100%);
+    border-radius: 6px;
+    font-weight: 600;
+    position: relative;
+}
+
+.lesson-content-formatted h2::before {
+    content: '📚';
+    margin-right: 10px;
+    font-size: 0.9em;
 }
 
 .lesson-content-formatted h3 {
     color: var(--secondary-color);
-    font-size: 1.3em;
-    margin: 20px 0 12px 0;
+    font-size: 1.4em;
+    margin: 25px 0 15px 0;
+    padding: 10px 0 10px 12px;
+    border-left: 3px solid var(--secondary-color);
+    background: linear-gradient(90deg, rgba(80, 200, 120, 0.08) 0%, transparent 100%);
+    border-radius: 5px;
     font-weight: 600;
+    position: relative;
+}
+
+.lesson-content-formatted h3::before {
+    content: '💡';
+    margin-right: 8px;
+    font-size: 0.85em;
 }
 
 .lesson-content-formatted p {
-    margin: 12px 0;
+    margin: 15px 0;
     text-align: justify;
+    font-size: 1.05em;
+    color: #2c3e50;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .lesson-content-formatted strong {
@@ -693,14 +809,21 @@ main {
 
 /* Блоки кода */
 .lesson-content-formatted pre.code-block {
-    background: #1e1e1e;
+    background: linear-gradient(135deg, #1e1e1e 0%, #252526 100%);
     color: #d4d4d4;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 25px;
+    border-radius: 12px;
     overflow-x: auto;
-    margin: 20px 0;
-    border-left: 4px solid var(--secondary-color);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin: 25px 0;
+    border-left: 5px solid var(--secondary-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lesson-content-formatted pre.code-block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .lesson-content-formatted pre.code-block code {
@@ -761,8 +884,22 @@ main {
 }
 
 .lesson-content-formatted li {
-    margin: 8px 0;
-    line-height: 1.6;
+    margin: 10px 0;
+    line-height: 1.8;
+    padding-left: 5px;
+    position: relative;
+}
+
+.lesson-content-formatted ul li::before {
+    content: '▸';
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: -20px;
+}
+
+.lesson-content-formatted ol li {
+    padding-left: 10px;
 }
 
 .lesson-content-formatted ul ul,
@@ -839,13 +976,124 @@ main {
 
 /* Блоки с важной информацией */
 .lesson-content-formatted blockquote {
-    border-left: 4px solid var(--warning-color);
-    background: linear-gradient(90deg, #fff3cd 0%, #fff9e6 100%);
-    padding: 15px 20px;
-    margin: 20px 0;
-    border-radius: 4px;
+    border-left: 5px solid var(--warning-color);
+    background: linear-gradient(135deg, #fff3cd 0%, #fff9e6 50%, #fffbf0 100%);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 8px;
     font-style: italic;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgba(243, 156, 18, 0.2);
+    position: relative;
+    font-size: 1.05em;
+}
+
+.lesson-content-formatted blockquote::before {
+    content: '⚠️';
+    position: absolute;
+    left: -15px;
+    top: 15px;
+    background: var(--warning-color);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+}
+
+/* Блоки с советами */
+.lesson-content-formatted .tip-box {
+    border-left: 5px solid var(--secondary-color);
+    background: linear-gradient(135deg, #d4edda 0%, #e8f5e9 50%, #f1f8f4 100%);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(80, 200, 120, 0.2);
+    position: relative;
+}
+
+.lesson-content-formatted .tip-box::before {
+    content: '💡 Совет';
+    position: absolute;
+    left: -15px;
+    top: 15px;
+    background: var(--secondary-color);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(80, 200, 120, 0.3);
+    font-style: normal;
+}
+
+.lesson-content-formatted .tip-box p {
+    margin: 0;
+    padding-left: 10px;
+}
+
+/* Блоки с ошибками */
+.lesson-content-formatted .error-box {
+    border-left: 5px solid var(--danger-color);
+    background: linear-gradient(135deg, #f8d7da 0%, #fce4e6 50%, #fff1f2 100%);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.2);
+    position: relative;
+}
+
+.lesson-content-formatted .error-box::before {
+    content: '❌ Ошибка';
+    position: absolute;
+    left: -15px;
+    top: 15px;
+    background: var(--danger-color);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+    font-style: normal;
+}
+
+.lesson-content-formatted .error-box p {
+    margin: 0;
+    padding-left: 10px;
+}
+
+/* Блоки с примерами */
+.lesson-content-formatted .example-box {
+    border-left: 5px solid #667eea;
+    background: linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 50%, #f3e5f5 100%);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.2);
+    position: relative;
+}
+
+.lesson-content-formatted .example-box::before {
+    content: '📝 Пример';
+    position: absolute;
+    left: -15px;
+    top: 15px;
+    background: #667eea;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    font-style: normal;
+}
+
+.lesson-content-formatted .example-box p {
+    margin: 0;
+    padding-left: 10px;
 }
 
 /* Улучшения для параграфов */
@@ -882,6 +1130,48 @@ main {
     background: #357abd;
 }
 
+/* Улучшенные карточки уроков */
+.lesson-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 5px solid var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.lesson-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.05) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lesson-card:hover::before {
+    opacity: 1;
+}
+
+.lesson-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(74, 144, 226, 0.2);
+    border-left-width: 6px;
+}
+
+.lesson-header-section {
+    background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, transparent 100%);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
 .modal-footer {
     display: flex;
     gap: 10px;
@@ -913,6 +1203,521 @@ main {
     
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Стили для соревнований */
+.challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.challenge-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.challenge-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.challenge-card.active {
+    border-color: var(--secondary-color);
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.challenge-header h3 {
+    color: var(--primary-color);
+    font-size: 1.3em;
+    margin: 0;
+    flex: 1;
+}
+
+.challenge-type {
+    background: var(--primary-color);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.challenge-description {
+    color: var(--dark-color);
+    margin-bottom: 20px;
+    line-height: 1.6;
+    min-height: 50px;
+}
+
+.challenge-info {
+    margin-bottom: 20px;
+}
+
+.challenge-info .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--light-color);
+}
+
+.challenge-info .info-item:last-child {
+    border-bottom: none;
+}
+
+.challenge-info .info-label {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.challenge-tasks {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid var(--light-color);
+}
+
+.challenge-tasks strong {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+.challenge-tasks ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.challenge-tasks li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--light-color);
+}
+
+.challenge-tasks li:last-child {
+    border-bottom: none;
+}
+
+.challenge-tasks .task-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.challenge-tasks .task-link:hover {
+    color: #357abd;
+    text-decoration: underline;
+}
+
+.difficulty-badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.difficulty-badge.easy {
+    background: #d4edda;
+    color: #155724;
+}
+
+.difficulty-badge.medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.difficulty-badge.hard {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.difficulty-badge.expert {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.challenge-status {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid var(--light-color);
+    text-align: center;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.status-badge.active {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.status-badge.inactive {
+    background: #e0e0e0;
+    color: #666;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1.1em;
+}
+
+@media (max-width: 768px) {
+    .challenges-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .challenge-header {
+        flex-direction: column;
+    }
+    
+    .challenge-tasks .task-link {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+/* Стили для модальных окон */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-large {
+    max-width: 900px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 2px solid var(--light-color);
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: var(--light-color);
+    color: var(--danger-color);
+}
+
+.modal-content form {
+    padding: 25px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="datetime-local"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group .code-input {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 0.85em;
+}
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* Стили для выбора задач в соревновании */
+.tasks-selection {
+    margin-top: 10px;
+}
+
+#task-search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.tasks-selection-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 2px solid var(--light-color);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.task-selection-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 5px;
+}
+
+.task-selection-item:hover {
+    background-color: var(--light-color);
+}
+
+.task-selection-item.selected {
+    background-color: #e3f2fd;
+    border: 2px solid var(--primary-color);
+}
+
+.task-selection-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.task-selection-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.task-selection-info strong {
+    color: var(--dark-color);
+}
+
+.task-meta-small {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 0.85em;
+}
+
+.selected-tasks {
+    margin-top: 15px;
+    padding: 15px;
+    background: var(--light-color);
+    border-radius: 8px;
+}
+
+.selected-tasks strong {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+#selected-tasks-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.selected-task-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: white;
+    border-radius: 20px;
+    border: 2px solid var(--primary-color);
+}
+
+.btn-remove {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn-remove:hover {
+    background: #c0392b;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header,
+    .tasks-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .lesson-content-formatted {
+        padding: 15px;
+    }
+    
+    .lesson-content-formatted h1 {
+        font-size: 1.8em;
+        padding: 12px 0 12px 15px;
+    }
+    
+    .lesson-content-formatted h2 {
+        font-size: 1.5em;
+        padding: 10px 0 10px 12px;
+    }
+    
+    .lesson-content-formatted h3 {
+        font-size: 1.2em;
+        padding: 8px 0 8px 10px;
+    }
+    
+    .lesson-content-formatted pre.code-block {
+        padding: 15px;
+        font-size: 0.85em;
+    }
+    
+    .tip-box::before,
+    .error-box::before,
+    .example-box::before {
+        position: static;
+        display: inline-block;
+        margin-bottom: 10px;
+        margin-left: 0;
+    }
+    
+    .tip-box,
+    .error-box,
+    .example-box {
+        padding: 15px;
     }
 }
 

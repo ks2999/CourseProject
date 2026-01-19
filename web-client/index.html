@@ -22,51 +22,127 @@
         </header>
 
         <main>
-            <!-- Форма регистрации -->
-            <section id="register-section" class="auth-section">
-                <h2>Регистрация</h2>
-                <form id="register-form">
-                    <div class="form-group">
-                        <label for="reg-name">Имя:</label>
-                        <input type="text" id="reg-name" required minlength="2" maxlength="50">
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-email">Email:</label>
-                        <input type="email" id="reg-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-password">Пароль:</label>
-                        <input type="password" id="reg-password" required minlength="6">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-                </form>
-                <p class="toggle-auth">Уже есть аккаунт? <a href="#" onclick="showLogin(); return false;">Войти</a></p>
-            </section>
-
-            <!-- Форма входа -->
-            <section id="login-section" class="auth-section" style="display: none;">
-                <h2>Вход</h2>
+            <!-- Форма входа (показывается по умолчанию) -->
+            <section id="login-section" class="auth-section">
+                <h2>Вход в систему</h2>
                 <form id="login-form">
                     <div class="form-group">
                         <label for="login-email">Email:</label>
-                        <input type="email" id="login-email" required>
+                        <input type="email" id="login-email" required placeholder="Введите ваш email">
                     </div>
                     <div class="form-group">
                         <label for="login-password">Пароль:</label>
-                        <input type="password" id="login-password" required>
+                        <input type="password" id="login-password" required placeholder="Введите пароль">
                     </div>
                     <button type="submit" class="btn btn-primary">Войти</button>
                 </form>
                 <p class="toggle-auth">Нет аккаунта? <a href="#" onclick="showRegister(); return false;">Зарегистрироваться</a></p>
             </section>
 
+            <!-- Форма регистрации -->
+            <section id="register-section" class="auth-section" style="display: none;">
+                <h2>Регистрация</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-name">Имя:</label>
+                        <input type="text" id="reg-name" required minlength="2" maxlength="50" placeholder="Введите ваше имя">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email:</label>
+                        <input type="email" id="reg-email" required placeholder="Введите ваш email">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Пароль:</label>
+                        <input type="password" id="reg-password" required minlength="6" placeholder="Минимум 6 символов">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </form>
+                <p class="toggle-auth">Уже есть аккаунт? <a href="#" onclick="showLogin(); return false;">Войти</a></p>
+            </section>
+
             <!-- Сообщения об ошибках/успехе -->
             <div id="message" class="message" style="display: none;"></div>
+
+            <!-- Секция соревнований (показывается после входа) -->
+            <section id="challenges-section" style="display: none;">
+                <div class="section-header">
+                    <h2>🏆 Соревнования</h2>
+                    <button id="create-challenge-btn" class="btn btn-primary" style="display: none;" onclick="openCreateChallengeModal()">
+                        + Создать соревнование
+                    </button>
+                </div>
+                <div id="challenges-container" class="challenges-grid">
+                    <!-- Соревнования будут загружены здесь -->
+                </div>
+            </section>
         </main>
+    </div>
+
+    <!-- Модальное окно для создания соревнования -->
+    <div id="create-challenge-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Создать новое соревнование</h2>
+                <button class="modal-close" onclick="closeCreateChallengeModal()">&times;</button>
+            </div>
+            <form id="create-challenge-form" onsubmit="createChallenge(event)">
+                <div class="form-group">
+                    <label for="challenge-title-input">Название соревнования *</label>
+                    <input type="text" id="challenge-title-input" required maxlength="255">
+                </div>
+                <div class="form-group">
+                    <label for="challenge-description-input">Описание</label>
+                    <textarea id="challenge-description-input" rows="3" maxlength="1000"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="challenge-type-select">Тип соревнования *</label>
+                        <select id="challenge-type-select" required>
+                            <option value="DAILY">Задача дня</option>
+                            <option value="THEMATIC">Тематическое соревнование</option>
+                            <option value="WEEKLY">Недельный челлендж</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="challenge-xp-reward">Награда (XP)</label>
+                        <input type="number" id="challenge-xp-reward" min="1" value="50">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="challenge-start-date">Дата начала *</label>
+                        <input type="datetime-local" id="challenge-start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="challenge-end-date">Дата окончания *</label>
+                        <input type="datetime-local" id="challenge-end-date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Выберите задачи для соревнования *</label>
+                    <div class="tasks-selection">
+                        <input type="text" id="task-search" placeholder="Поиск задач..." onkeyup="filterTasks()">
+                        <div id="tasks-selection-list" class="tasks-selection-list">
+                            <!-- Задачи будут загружены здесь -->
+                        </div>
+                        <div id="selected-tasks" class="selected-tasks">
+                            <strong>Выбранные задачи:</strong>
+                            <div id="selected-tasks-list"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeCreateChallengeModal()">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Создать соревнование</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/challenges.js"></script>
+    <script src="js/challenge-create.js"></script>
 </body>
 </html>
 

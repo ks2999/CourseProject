@@ -1257,5 +1257,870 @@ public class LessonContent {
         - Строковые литералы неизменяемы
         - Для сравнения используйте strcmp, не ==
         """;
+    
+    public static final String LESSON_6_CONDITIONS = """
+        # Условные операторы в C
+        
+        ## Что такое условные операторы?
+        
+        Условные операторы позволяют программе принимать решения и выполнять разные действия в зависимости от условий. Это основа логики программирования.
+        
+        ## Оператор if
+        
+        Самый простой способ проверки условия.
+        
+        **Синтаксис:**
+        ```c
+        if (условие) {
+            // код выполнится, если условие истинно (true)
+        }
+        ```
+        
+        **Пример:**
+        ```c
+        int age = 18;
+        if (age >= 18) {
+            printf("Вы совершеннолетний\\n");
+        }
+        ```
+        
+        ## Оператор if-else
+        
+        Выполняет один блок кода, если условие истинно, и другой - если ложно.
+        
+        **Синтаксис:**
+        ```c
+        if (условие) {
+            // код если условие истинно
+        } else {
+            // код если условие ложно
+        }
+        ```
+        
+        **Пример:**
+        ```c
+        int number = 5;
+        if (number % 2 == 0) {
+            printf("Число четное\\n");
+        } else {
+            printf("Число нечетное\\n");
+        }
+        ```
+        
+        ## Оператор else-if
+        
+        Позволяет проверить несколько условий подряд.
+        
+        **Синтаксис:**
+        ```c
+        if (условие1) {
+            // код 1
+        } else if (условие2) {
+            // код 2
+        } else if (условие3) {
+            // код 3
+        } else {
+            // код если ни одно условие не выполнено
+        }
+        ```
+        
+        **Пример:**
+        ```c
+        int score = 85;
+        if (score >= 90) {
+            printf("Отлично!\\n");
+        } else if (score >= 70) {
+            printf("Хорошо!\\n");
+        } else if (score >= 50) {
+            printf("Удовлетворительно\\n");
+        } else {
+            printf("Неудовлетворительно\\n");
+        }
+        ```
+        
+        ## Оператор switch
+        
+        Используется для выбора одного из многих вариантов на основе значения переменной.
+        
+        **Синтаксис:**
+        ```c
+        switch (переменная) {
+            case значение1:
+                // код для значение1
+                break;
+            case значение2:
+                // код для значение2
+                break;
+            default:
+                // код если ни одно значение не подошло
+        }
+        ```
+        
+        **Пример:**
+        ```c
+        int day = 3;
+        switch (day) {
+            case 1:
+                printf("Понедельник\\n");
+                break;
+            case 2:
+                printf("Вторник\\n");
+                break;
+            case 3:
+                printf("Среда\\n");
+                break;
+            default:
+                printf("Другой день\\n");
+        }
+        ```
+        
+        **Важно:** Не забудьте `break` после каждого `case`, иначе выполнение продолжится в следующем case!
+        
+        ## Логические операторы
+        
+        ### && (И)
+        
+        Возвращает true, если оба условия истинны.
+        
+        ```c
+        int age = 20;
+        int money = 1000;
+        if (age >= 18 && money >= 500) {
+            printf("Можно купить\\n");
+        }
+        ```
+        
+        ### || (ИЛИ)
+        
+        Возвращает true, если хотя бы одно условие истинно.
+        
+        ```c
+        if (age < 18 || age > 65) {
+            printf("Льготная категория\\n");
+        }
+        ```
+        
+        ### ! (НЕ)
+        
+        Инвертирует условие.
+        
+        ```c
+        if (!isStudent) {
+            printf("Не студент\\n");
+        }
+        ```
+        
+        ## Операторы сравнения
+        
+        - `==` - равно
+        - `!=` - не равно
+        - `>` - больше
+        - `<` - меньше
+        - `>=` - больше или равно
+        - `<=` - меньше или равно
+        
+        **Пример:**
+        ```c
+        int a = 5, b = 10;
+        
+        if (a == b) printf("Равны\\n");
+        if (a != b) printf("Не равны\\n");
+        if (a < b) printf("a меньше b\\n");
+        if (a > b) printf("a больше b\\n");
+        ```
+        
+        ## Тернарный оператор
+        
+        Короткая форма if-else для простых случаев.
+        
+        **Синтаксис:**
+        ```c
+        переменная = условие ? значение_если_истина : значение_если_ложь;
+        ```
+        
+        **Пример:**
+        ```c
+        int max = (a > b) ? a : b;  // выбирает большее из двух чисел
+        ```
+        
+        Эквивалентно:
+        ```c
+        int max;
+        if (a > b) {
+            max = a;
+        } else {
+            max = b;
+        }
+        ```
+        
+        ## Вложенные условия
+        
+        Условия можно вкладывать друг в друга:
+        
+        ```c
+        int age = 20;
+        int money = 1000;
+        
+        if (age >= 18) {
+            if (money >= 500) {
+                printf("Можно купить\\n");
+            } else {
+                printf("Недостаточно денег\\n");
+            }
+        } else {
+            printf("Слишком молодой\\n");
+        }
+        ```
+        
+        ## Практические примеры
+        
+        ### Пример 1: Определение знака числа
+        
+        ```c
+        #include <stdio.h>
+        
+        int main() {
+            int number;
+            scanf("%d", &number);
+            
+            if (number > 0) {
+                printf("Положительное\\n");
+            } else if (number < 0) {
+                printf("Отрицательное\\n");
+            } else {
+                printf("Ноль\\n");
+            }
+            
+            return 0;
+        }
+        ```
+        
+        ### Пример 2: Калькулятор
+        
+        ```c
+        #include <stdio.h>
+        
+        int main() {
+            char operator;
+            double a, b, result;
+            
+            scanf("%lf %c %lf", &a, &operator, &b);
+            
+            switch (operator) {
+                case '+':
+                    result = a + b;
+                    break;
+                case '-':
+                    result = a - b;
+                    break;
+                case '*':
+                    result = a * b;
+                    break;
+                case '/':
+                    if (b != 0) {
+                        result = a / b;
+                    } else {
+                        printf("Ошибка: деление на ноль!\\n");
+                        return 1;
+                    }
+                    break;
+                default:
+                    printf("Неизвестная операция\\n");
+                    return 1;
+            }
+            
+            printf("Результат: %.2lf\\n", result);
+            return 0;
+        }
+        ```
+        
+        ## Типичные ошибки
+        
+        1. **Использование = вместо ==:**
+        ```c
+        if (x = 5) {  // ОШИБКА! Присваивание вместо сравнения
+            // всегда будет true
+        }
+        // Правильно: if (x == 5)
+        ```
+        
+        2. **Забыли break в switch:**
+        ```c
+        switch (x) {
+            case 1:
+                printf("Один\\n");
+                // забыли break - выполнится и case 2!
+            case 2:
+                printf("Два\\n");
+                break;
+        }
+        ```
+        
+        3. **Сравнение строк через ==:**
+        ```c
+        char str1[] = "Hello";
+        char str2[] = "Hello";
+        if (str1 == str2) {  // ОШИБКА! Сравнивает адреса
+            // всегда false
+        }
+        // Правильно: if (strcmp(str1, str2) == 0)
+        ```
+        
+        ## Резюме
+        
+        - Используйте `if` для простых условий
+        - Используйте `if-else` для двух вариантов
+        - Используйте `else-if` для множественных условий
+        - Используйте `switch` для выбора по значению
+        - Всегда используйте `break` в `switch`
+        - Используйте логические операторы для сложных условий
+        - Тернарный оператор удобен для простых присваиваний
+        - Будьте осторожны с `=` и `==`
+        """;
+    
+    public static final String LESSON_7_STRUCTS = """
+        # Структуры данных в C
+        
+        ## Что такое структура?
+        
+        Структура (struct) - это пользовательский тип данных, который позволяет объединить несколько переменных разных типов под одним именем. Это основа объектно-ориентированного подхода в C.
+        
+        ## Объявление структуры
+        
+        **Синтаксис:**
+        ```c
+        struct имя_структуры {
+            тип1 поле1;
+            тип2 поле2;
+            // ...
+        };
+        ```
+        
+        **Пример:**
+        ```c
+        struct Student {
+            char name[50];
+            int age;
+            float gpa;
+        };
+        ```
+        
+        ## Создание переменных структуры
+        
+        ```c
+        struct Student student1;
+        struct Student student2;
+        ```
+        
+        Или при объявлении:
+        ```c
+        struct Student {
+            char name[50];
+            int age;
+            float gpa;
+        } student1, student2;
+        ```
+        
+        ## Доступ к полям
+        
+        Используется оператор точка (`.`):
+        
+        ```c
+        struct Student student1;
+        
+        strcpy(student1.name, "Иван");
+        student1.age = 20;
+        student1.gpa = 4.5;
+        
+        printf("Имя: %s, Возраст: %d, GPA: %.2f\\n", 
+               student1.name, student1.age, student1.gpa);
+        ```
+        
+        ## Инициализация структуры
+        
+        ```c
+        struct Student student1 = {"Иван", 20, 4.5};
+        
+        // Или по полям
+        struct Student student2 = {
+            .name = "Мария",
+            .age = 19,
+            .gpa = 4.8
+        };
+        ```
+        
+        ## typedef - создание псевдонимов
+        
+        `typedef` позволяет создать более короткое имя для структуры:
+        
+        ```c
+        typedef struct {
+            char name[50];
+            int age;
+            float gpa;
+        } Student;
+        
+        // Теперь можно использовать без слова struct
+        Student student1;
+        Student student2;
+        ```
+        
+        ## Массивы структур
+        
+        Можно создавать массивы структур:
+        
+        ```c
+        struct Student students[10];
+        
+        for (int i = 0; i < 10; i++) {
+            printf("Введите имя студента %d: ", i + 1);
+            scanf("%s", students[i].name);
+            printf("Введите возраст: ");
+            scanf("%d", &students[i].age);
+        }
+        ```
+        
+        ## Структуры и функции
+        
+        ### Передача структуры в функцию
+        
+        ```c
+        void printStudent(struct Student s) {
+            printf("Имя: %s, Возраст: %d, GPA: %.2f\\n", 
+                   s.name, s.age, s.gpa);
+        }
+        
+        int main() {
+            struct Student student = {"Иван", 20, 4.5};
+            printStudent(student);
+            return 0;
+        }
+        ```
+        
+        **Важно:** При передаче структуры по значению создается копия!
+        
+        ### Передача указателя на структуру
+        
+        Более эффективный способ:
+        
+        ```c
+        void printStudent(struct Student *s) {
+            printf("Имя: %s, Возраст: %d, GPA: %.2f\\n", 
+                   s->name, s->age, s->gpa);
+        }
+        
+        int main() {
+            struct Student student = {"Иван", 20, 4.5};
+            printStudent(&student);
+            return 0;
+        }
+        ```
+        
+        **Оператор `->`** используется для доступа к полям через указатель.
+        
+        ## Вложенные структуры
+        
+        Структуры могут содержать другие структуры:
+        
+        ```c
+        struct Date {
+            int day;
+            int month;
+            int year;
+        };
+        
+        struct Person {
+            char name[50];
+            struct Date birthDate;
+            int age;
+        };
+        
+        struct Person person = {
+            .name = "Иван",
+            .birthDate = {15, 5, 2000},
+            .age = 23
+        };
+        
+        printf("Дата рождения: %d.%d.%d\\n", 
+               person.birthDate.day, 
+               person.birthDate.month, 
+               person.birthDate.year);
+        ```
+        
+        ## Практические примеры
+        
+        ### Пример 1: Точка на плоскости
+        
+        ```c
+        #include <stdio.h>
+        #include <math.h>
+        
+        typedef struct {
+            double x;
+            double y;
+        } Point;
+        
+        double distance(Point p1, Point p2) {
+            double dx = p2.x - p1.x;
+            double dy = p2.y - p1.y;
+            return sqrt(dx * dx + dy * dy);
+        }
+        
+        int main() {
+            Point p1 = {0, 0};
+            Point p2 = {3, 4};
+            
+            printf("Расстояние: %.2f\\n", distance(p1, p2));
+            return 0;
+        }
+        ```
+        
+        ### Пример 2: Книга
+        
+        ```c
+        typedef struct {
+            char title[100];
+            char author[50];
+            int year;
+            float price;
+        } Book;
+        
+        void printBook(Book *book) {
+            printf("Название: %s\\n", book->title);
+            printf("Автор: %s\\n", book->author);
+            printf("Год: %d\\n", book->year);
+            printf("Цена: %.2f\\n", book->price);
+        }
+        
+        int main() {
+            Book book = {
+                .title = "Язык C",
+                .author = "Керниган и Ритчи",
+                .year = 1978,
+                .price = 1500.0
+            };
+            
+            printBook(&book);
+            return 0;
+        }
+        ```
+        
+        ## Типичные ошибки
+        
+        1. **Забыли точку с запятой после объявления:**
+        ```c
+        struct Student {
+            char name[50];
+            int age;
+        }  // ОШИБКА! Нужна точка с запятой
+        ```
+        
+        2. **Использование . вместо -> с указателем:**
+        ```c
+        struct Student *s;
+        s.name = "Иван";  // ОШИБКА!
+        s->name = "Иван"; // Правильно
+        ```
+        
+        3. **Копирование строк через =:**
+        ```c
+        struct Student s;
+        s.name = "Иван";  // ОШИБКА!
+        strcpy(s.name, "Иван"); // Правильно
+        ```
+        
+        ## Резюме
+        
+        - Структуры объединяют разные типы данных
+        - Используйте `.` для доступа к полям
+        - Используйте `->` для доступа через указатель
+        - `typedef` создает удобные псевдонимы
+        - Структуры можно вкладывать друг в друга
+        - Передавайте структуры по указателю для эффективности
+        - Структуры - основа для создания сложных типов данных
+        """;
+    
+    public static final String LESSON_8_FILES = """
+        # Работа с файлами в C
+        
+        ## Введение
+        
+        Работа с файлами позволяет программе сохранять данные на диск и читать их обратно. Это необходимо для создания программ, которые работают с постоянными данными.
+        
+        ## Открытие файла
+        
+        Используется функция `fopen()`:
+        
+        **Синтаксис:**
+        ```c
+        FILE *fopen(const char *filename, const char *mode);
+        ```
+        
+        **Режимы открытия:**
+        - `"r"` - чтение (read)
+        - `"w"` - запись (write, создает новый файл или перезаписывает существующий)
+        - `"a"` - добавление (append, добавляет в конец файла)
+        - `"r+"` - чтение и запись
+        - `"w+"` - чтение и запись (создает новый файл)
+        - `"a+"` - чтение и добавление
+        
+        **Пример:**
+        ```c
+        #include <stdio.h>
+        
+        FILE *file = fopen("data.txt", "r");
+        if (file == NULL) {
+            printf("Ошибка открытия файла!\\n");
+            return 1;
+        }
+        // работа с файлом
+        fclose(file);
+        ```
+        
+        **Важно:** Всегда проверяйте результат `fopen()` на `NULL`!
+        
+        ## Закрытие файла
+        
+        Используется функция `fclose()`:
+        
+        ```c
+        fclose(file);
+        ```
+        
+        **Важно:** Всегда закрывайте файлы после работы с ними!
+        
+        ## Чтение из файла
+        
+        ### fgetc() - чтение одного символа
+        
+        ```c
+        FILE *file = fopen("data.txt", "r");
+        if (file == NULL) {
+            printf("Ошибка!\\n");
+            return 1;
+        }
+        
+        int ch;
+        while ((ch = fgetc(file)) != EOF) {
+            printf("%c", ch);
+        }
+        
+        fclose(file);
+        ```
+        
+        ### fgets() - чтение строки
+        
+        ```c
+        FILE *file = fopen("data.txt", "r");
+        char line[100];
+        
+        while (fgets(line, sizeof(line), file) != NULL) {
+            printf("%s", line);
+        }
+        
+        fclose(file);
+        ```
+        
+        ### fscanf() - форматированное чтение
+        
+        ```c
+        FILE *file = fopen("data.txt", "r");
+        int number;
+        char name[50];
+        
+        while (fscanf(file, "%d %s", &number, name) == 2) {
+            printf("Число: %d, Имя: %s\\n", number, name);
+        }
+        
+        fclose(file);
+        ```
+        
+        ## Запись в файл
+        
+        ### fputc() - запись одного символа
+        
+        ```c
+        FILE *file = fopen("output.txt", "w");
+        if (file == NULL) {
+            printf("Ошибка!\\n");
+            return 1;
+        }
+        
+        fputc('A', file);
+        fputc('\\n', file);
+        
+        fclose(file);
+        ```
+        
+        ### fputs() - запись строки
+        
+        ```c
+        FILE *file = fopen("output.txt", "w");
+        fputs("Привет, мир!\\n", file);
+        fclose(file);
+        ```
+        
+        ### fprintf() - форматированная запись
+        
+        ```c
+        FILE *file = fopen("output.txt", "w");
+        int age = 20;
+        char name[] = "Иван";
+        
+        fprintf(file, "Имя: %s, Возраст: %d\\n", name, age);
+        fclose(file);
+        ```
+        
+        ## Проверка конца файла
+        
+        Используется функция `feof()`:
+        
+        ```c
+        FILE *file = fopen("data.txt", "r");
+        int ch;
+        
+        while (!feof(file)) {
+            ch = fgetc(file);
+            if (ch != EOF) {
+                printf("%c", ch);
+            }
+        }
+        
+        fclose(file);
+        ```
+        
+        ## Обработка ошибок
+        
+        ```c
+        FILE *file = fopen("data.txt", "r");
+        if (file == NULL) {
+            perror("Ошибка открытия файла");
+            return 1;
+        }
+        
+        // работа с файлом
+        
+        if (fclose(file) != 0) {
+            perror("Ошибка закрытия файла");
+            return 1;
+        }
+        ```
+        
+        ## Практические примеры
+        
+        ### Пример 1: Копирование файла
+        
+        ```c
+        #include <stdio.h>
+        
+        int main() {
+            FILE *source = fopen("source.txt", "r");
+            FILE *dest = fopen("dest.txt", "w");
+            
+            if (source == NULL || dest == NULL) {
+                printf("Ошибка открытия файлов!\\n");
+                return 1;
+            }
+            
+            int ch;
+            while ((ch = fgetc(source)) != EOF) {
+                fputc(ch, dest);
+            }
+            
+            fclose(source);
+            fclose(dest);
+            
+            printf("Файл скопирован!\\n");
+            return 0;
+        }
+        ```
+        
+        ### Пример 2: Подсчет строк в файле
+        
+        ```c
+        #include <stdio.h>
+        
+        int main() {
+            FILE *file = fopen("data.txt", "r");
+            if (file == NULL) {
+                printf("Ошибка!\\n");
+                return 1;
+            }
+            
+            int lines = 0;
+            char line[1000];
+            
+            while (fgets(line, sizeof(line), file) != NULL) {
+                lines++;
+            }
+            
+            printf("Количество строк: %d\\n", lines);
+            fclose(file);
+            return 0;
+        }
+        ```
+        
+        ### Пример 3: Чтение чисел из файла
+        
+        ```c
+        #include <stdio.h>
+        
+        int main() {
+            FILE *file = fopen("numbers.txt", "r");
+            if (file == NULL) {
+                printf("Ошибка!\\n");
+                return 1;
+            }
+            
+            int number, sum = 0, count = 0;
+            
+            while (fscanf(file, "%d", &number) == 1) {
+                sum += number;
+                count++;
+            }
+            
+            if (count > 0) {
+                printf("Сумма: %d\\n", sum);
+                printf("Среднее: %.2f\\n", (double)sum / count);
+            }
+            
+            fclose(file);
+            return 0;
+        }
+        ```
+        
+        ## Типичные ошибки
+        
+        1. **Не проверили результат fopen():**
+        ```c
+        FILE *file = fopen("data.txt", "r");
+        // ОШИБКА! file может быть NULL
+        fgetc(file); // крах программы!
+        ```
+        
+        2. **Забыли закрыть файл:**
+        ```c
+        FILE *file = fopen("data.txt", "r");
+        // работа с файлом
+        // забыли fclose(file) - утечка ресурсов!
+        ```
+        
+        3. **Использование неправильного режима:**
+        ```c
+        FILE *file = fopen("data.txt", "w");
+        fgetc(file); // ОШИБКА! Файл открыт только для записи
+        ```
+        
+        ## Резюме
+        
+        - Всегда проверяйте результат `fopen()` на `NULL`
+        - Всегда закрывайте файлы через `fclose()`
+        - Используйте правильные режимы открытия
+        - `fgetc()` читает символ, `fputc()` записывает
+        - `fgets()` читает строку, `fputs()` записывает
+        - `fscanf()` и `fprintf()` для форматированного ввода/вывода
+        - Используйте `feof()` для проверки конца файла
+        - Обрабатывайте ошибки через `perror()`
+        """;
 }
 

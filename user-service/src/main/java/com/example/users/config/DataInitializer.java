@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,17 +26,20 @@ public class DataInitializer implements CommandLineRunner {
     private final SkillRepository skillRepository;
     private final LessonRepository lessonRepository;
     private final TaskRepository taskRepository;
+    private final ChallengeRepository challengeRepository;
     private final PasswordEncoder passwordEncoder;
     
     public DataInitializer(UserRepository userRepository,
                           SkillRepository skillRepository,
                           LessonRepository lessonRepository,
                           TaskRepository taskRepository,
+                          ChallengeRepository challengeRepository,
                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.skillRepository = skillRepository;
         this.lessonRepository = lessonRepository;
         this.taskRepository = taskRepository;
+        this.challengeRepository = challengeRepository;
         this.passwordEncoder = passwordEncoder;
     }
     
@@ -87,6 +91,24 @@ public class DataInitializer implements CommandLineRunner {
             "Работа со строками в C"
         );
         
+        Skill skillConditions = createSkillIfNotExists(
+            UUID.fromString("00000000-0000-0000-0000-000000000006"),
+            "Условия",
+            "Работа с условными операторами if, else, switch"
+        );
+        
+        Skill skillStructs = createSkillIfNotExists(
+            UUID.fromString("00000000-0000-0000-0000-000000000007"),
+            "Структуры",
+            "Работа со структурами данных"
+        );
+        
+        Skill skillFiles = createSkillIfNotExists(
+            UUID.fromString("00000000-0000-0000-0000-000000000008"),
+            "Файлы",
+            "Работа с файлами в C"
+        );
+        
         // Создаем уроки с подробной теорией
         Lesson lesson1 = createLessonIfNotExists(
             UUID.fromString("10000000-0000-0000-0000-000000000001"),
@@ -135,6 +157,37 @@ public class DataInitializer implements CommandLineRunner {
             LessonContent.LESSON_5_STRINGS,
             "Строки",
             5,
+            teacher
+        );
+        
+        // Создаем дополнительные уроки
+        Lesson lesson6 = createLessonIfNotExists(
+            UUID.fromString("10000000-0000-0000-0000-000000000006"),
+            "Условные операторы",
+            "Изучите работу с условиями if, else, switch - основы принятия решений в программах",
+            LessonContent.LESSON_6_CONDITIONS,
+            "Условия",
+            6,
+            teacher
+        );
+        
+        Lesson lesson7 = createLessonIfNotExists(
+            UUID.fromString("10000000-0000-0000-0000-000000000007"),
+            "Структуры данных",
+            "Научитесь создавать и использовать структуры (struct) для организации данных",
+            LessonContent.LESSON_7_STRUCTS,
+            "Структуры",
+            7,
+            teacher
+        );
+        
+        Lesson lesson8 = createLessonIfNotExists(
+            UUID.fromString("10000000-0000-0000-0000-000000000008"),
+            "Работа с файлами",
+            "Изучите чтение и запись файлов в C - важный навык для работы с данными",
+            LessonContent.LESSON_8_FILES,
+            "Файлы",
+            8,
             teacher
         );
         
@@ -308,8 +361,102 @@ public class DataInitializer implements CommandLineRunner {
             teacher
         );
         
+        // Создаем соревнования по 5 задач в каждом
+        createChallenges(teacher);
+        
         log.info("Инициализация тестовых данных завершена успешно!");
-        log.info("Создано: 5 навыков, 5 уроков, 13 задач");
+        log.info("Создано: 8 навыков, 8 уроков, 13 задач, несколько соревнований");
+    }
+    
+    private void createChallenges(User teacher) {
+        log.info("Создание соревнований...");
+        
+        // Получаем все задачи для создания соревнований
+        List<Task> allTasks = taskRepository.findAll();
+        if (allTasks.size() < 15) {
+            log.warn("Недостаточно задач для создания соревнований. Требуется минимум 15 задач.");
+            return;
+        }
+        
+        // Соревнование 1: Основы программирования (первые 5 задач)
+        createChallengeIfNotExists(
+            UUID.fromString("30000000-0000-0000-0000-000000000001"),
+            "Основы программирования",
+            "Соревнование для начинающих программистов. Решите 5 базовых задач по циклам и условиям.",
+            Challenge.Type.THEMATIC,
+            allTasks.subList(0, 5),
+            java.time.LocalDateTime.now().minusDays(2),
+            java.time.LocalDateTime.now().plusDays(5),
+            100,
+            teacher
+        );
+        
+        // Соревнование 2: Работа с массивами (следующие 5 задач)
+        if (allTasks.size() >= 10) {
+            createChallengeIfNotExists(
+                UUID.fromString("30000000-0000-0000-0000-000000000002"),
+                "Мастер массивов",
+                "Продвинутое соревнование по работе с массивами. Покажите свои навыки в обработке данных!",
+                Challenge.Type.WEEKLY,
+                allTasks.subList(5, 10),
+                java.time.LocalDateTime.now().minusDays(1),
+                java.time.LocalDateTime.now().plusDays(6),
+                150,
+                teacher
+            );
+        }
+        
+        // Соревнование 3: Сложные алгоритмы (последние 5 задач)
+        if (allTasks.size() >= 15) {
+            createChallengeIfNotExists(
+                UUID.fromString("30000000-0000-0000-0000-000000000003"),
+                "Алгоритмический вызов",
+                "Сложное соревнование для опытных программистов. Решите задачи на указатели и динамическую память.",
+                Challenge.Type.THEMATIC,
+                allTasks.subList(10, Math.min(15, allTasks.size())),
+                java.time.LocalDateTime.now(),
+                java.time.LocalDateTime.now().plusDays(7),
+                200,
+                teacher
+            );
+        }
+        
+        // Соревнование 4: Задача дня (одна случайная задача)
+        if (!allTasks.isEmpty()) {
+            Task dailyTask = allTasks.get(0);
+            createChallengeIfNotExists(
+                UUID.fromString("30000000-0000-0000-0000-000000000004"),
+                "Задача дня",
+                "Ежедневная задача для поддержания навыков программирования.",
+                Challenge.Type.DAILY,
+                java.util.Arrays.asList(dailyTask),
+                java.time.LocalDateTime.now(),
+                java.time.LocalDateTime.now().plusDays(1),
+                50,
+                teacher
+            );
+        }
+        
+        log.info("Создано {} соревнований", challengeRepository.count());
+    }
+    
+    private Challenge createChallengeIfNotExists(UUID id, String title, String description,
+                                                 Challenge.Type type, List<Task> tasks,
+                                                 java.time.LocalDateTime startDate,
+                                                 java.time.LocalDateTime endDate,
+                                                 int xpReward, User teacher) {
+        return challengeRepository.findById(id)
+                .orElseGet(() -> {
+                    log.debug("Создание соревнования: {} с {} задачами", title, tasks.size());
+                    Challenge challenge = new Challenge(title, description, type, tasks);
+                    challenge.setId(id);
+                    challenge.setStartDate(startDate);
+                    challenge.setEndDate(endDate);
+                    challenge.setXpReward(xpReward);
+                    challenge.setActive(true);
+                    challenge.setCreatedBy(teacher);
+                    return challengeRepository.save(challenge);
+                });
     }
     
     private Skill createSkillIfNotExists(UUID id, String name, String description) {

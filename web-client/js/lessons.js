@@ -48,16 +48,19 @@ function displayLessons(lessons) {
         return;
     }
 
+    // Сортируем уроки по порядку
+    lessons.sort((a, b) => (a.orderNumber || 0) - (b.orderNumber || 0));
+    
     lessonsList.innerHTML = lessons.map(lesson => `
         <div class="lesson-card" onclick="openLesson('${lesson.id}')">
             <div class="lesson-header">
-                <h3>${lesson.title}</h3>
-                ${lesson.topic ? `<span class="lesson-topic">${lesson.topic}</span>` : ''}
+                <h3>📖 ${escapeHtml(lesson.title)}</h3>
+                ${lesson.topic ? `<span class="lesson-topic">${escapeHtml(lesson.topic)}</span>` : ''}
             </div>
-            <div class="lesson-description">${lesson.description || 'Описание отсутствует'}</div>
+            <div class="lesson-description">${escapeHtml(lesson.description || 'Описание отсутствует')}</div>
             <div class="lesson-footer">
-                <span class="lesson-order">Урок ${lesson.orderNumber || '?'}</span>
-                <a href="tasks.html?lesson=${lesson.id}" class="btn btn-secondary btn-small">Задачи урока</a>
+                <span class="lesson-order">📚 Урок ${lesson.orderNumber || '?'}</span>
+                <a href="tasks.html?lesson=${lesson.id}" class="btn btn-secondary btn-small" onclick="event.stopPropagation();">Задачи урока</a>
             </div>
         </div>
     `).join('');
@@ -112,6 +115,14 @@ async function openLesson(lessonId) {
     } catch (error) {
         showMessage('Ошибка при загрузке урока: ' + error.message, 'error');
     }
+}
+
+// Экранирование HTML для безопасности
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Подсветка синтаксиса кода (простая версия)

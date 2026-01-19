@@ -71,6 +71,31 @@ const userApi = {
     }
 };
 
+// Функции для работы с файлами
+const fileApi = {
+    async uploadAvatar(file, userId) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('userId', userId);
+        
+        const response = await fetch(`${API_BASE_URL}/files/avatars?userId=${userId}`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+            throw new Error(error.error || `HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    },
+    
+    getAvatarUrl(filename) {
+        return `${API_BASE_URL}/files/avatars/${filename}`;
+    }
+};
+
 // Функции для работы с прогрессом
 const progressApi = {
     async getProgress(userId) {
@@ -86,6 +111,83 @@ const progressApi = {
 const skillApi = {
     async getStudentSkills(userId) {
         return api.get(`/student-skills/user/${userId}`);
+    },
+
+    async getAll() {
+        return api.get('/skills');
+    },
+
+    async getById(id) {
+        return api.get(`/skills/${id}`);
+    }
+};
+
+// Функции для работы с уроками
+const lessonApi = {
+    async getAll() {
+        return api.get('/lessons');
+    },
+
+    async getPublished() {
+        return api.get('/lessons/published');
+    },
+
+    async getById(id) {
+        return api.get(`/lessons/${id}`);
+    }
+};
+
+// Функции для работы с задачами
+const taskApi = {
+    async getAll() {
+        return api.get('/tasks');
+    },
+
+    async getPublished() {
+        return api.get('/tasks/published');
+    },
+
+    async getById(id) {
+        return api.get(`/tasks/${id}`);
+    },
+
+    async create(taskData, createdById) {
+        return api.post(`/tasks?createdById=${createdById}`, taskData);
+    },
+
+    async update(id, taskData, currentUserId) {
+        return api.put(`/tasks/${id}?currentUserId=${currentUserId}`, taskData);
+    },
+
+    async delete(id, currentUserId) {
+        return api.delete(`/tasks/${id}?currentUserId=${currentUserId}`);
+    }
+};
+
+// Функции для работы с соревнованиями
+const challengeApi = {
+    async getAll() {
+        return api.get('/challenges');
+    },
+
+    async getActive() {
+        return api.get('/challenges/active');
+    },
+
+    async getById(id) {
+        return api.get(`/challenges/${id}`);
+    },
+
+    async create(challengeData, createdById) {
+        return api.post(`/challenges?createdById=${createdById}`, challengeData);
+    },
+
+    async update(id, challengeData, currentUserId) {
+        return api.put(`/challenges/${id}?currentUserId=${currentUserId}`, challengeData);
+    },
+
+    async delete(id, currentUserId) {
+        return api.delete(`/challenges/${id}?currentUserId=${currentUserId}`);
     }
 };
 
@@ -113,5 +215,33 @@ function setCurrentUser(userId) {
 
 function clearCurrentUser() {
     localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
+}
+
+// Сохранение информации о пользователе
+async function loadCurrentUser() {
+    const userId = getCurrentUserId();
+    if (!userId) return null;
+    
+    try {
+        const user = await userApi.getById(userId);
+        if (user && user.role) {
+            localStorage.setItem('userRole', user.role);
+        }
+        return user;
+    } catch (error) {
+        console.error('Ошибка загрузки пользователя:', error);
+        return null;
+    }
+}
+
+// Проверка роли пользователя
+function isTeacher() {
+    const role = localStorage.getItem('userRole');
+    return role === 'TEACHER' || role === 'ADMIN';
+}
+
+function getCurrentUserRole() {
+    return localStorage.getItem('userRole');
 }
 

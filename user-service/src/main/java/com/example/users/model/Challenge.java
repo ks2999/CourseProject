@@ -5,6 +5,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -44,9 +46,17 @@ public class Challenge {
     @Column(nullable = false)
     private Type type;
     
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "challenge_tasks",
+        joinColumns = @JoinColumn(name = "challenge_id"),
+        inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<Task> tasks; // Задачи для челленджа
+    
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_id")
-    private Task task; // Задача для челленджа
+    @JoinColumn(name = "created_by")
+    private User createdBy; // Преподаватель, создавший соревнование
     
     @Column(nullable = false)
     private LocalDateTime startDate;
@@ -69,13 +79,14 @@ public class Challenge {
     private LocalDateTime updatedAt;
     
     public Challenge() {
+        this.tasks = new ArrayList<>();
     }
     
-    public Challenge(String title, String description, Type type, Task task) {
+    public Challenge(String title, String description, Type type, List<Task> tasks) {
         this.title = title;
         this.description = description;
         this.type = type;
-        this.task = task;
+        this.tasks = tasks != null ? tasks : new ArrayList<>();
     }
     
     /**
@@ -119,12 +130,20 @@ public class Challenge {
         this.type = type;
     }
     
-    public Task getTask() {
-        return task;
+    public List<Task> getTasks() {
+        return tasks;
     }
     
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks != null ? tasks : new ArrayList<>();
+    }
+    
+    public User getCreatedBy() {
+        return createdBy;
+    }
+    
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
     
     public LocalDateTime getStartDate() {

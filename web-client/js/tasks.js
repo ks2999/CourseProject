@@ -1,17 +1,4 @@
-// API для работы с задачами
-const taskApi = {
-    async getAll() {
-        return api.get('/tasks');
-    },
-
-    async getPublished() {
-        return api.get('/tasks/published');
-    },
-
-    async getById(id) {
-        return api.get(`/tasks/${id}`);
-    }
-};
+// taskApi уже определен в api.js
 
 const submissionApi = {
     async submit(taskId, code, userId) {
@@ -40,6 +27,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!userId) {
         window.location.href = 'index.html';
         return;
+    }
+
+    // Загружаем информацию о пользователе для получения роли
+    await loadCurrentUser();
+    
+    // Показываем кнопку создания задачи только для учителей
+    const createBtn = document.getElementById('create-task-btn');
+    if (createBtn && isTeacher()) {
+        createBtn.style.display = 'inline-block';
     }
 
     await loadTasks();

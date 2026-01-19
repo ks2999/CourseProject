@@ -27,9 +27,16 @@
                 
                 <div class="profile-card">
                     <div class="avatar-section">
-                        <img id="avatar-img" src="https://via.placeholder.com/150" alt="Аватар" class="avatar">
-                        <button onclick="document.getElementById('avatar-input').click()" class="btn btn-secondary">Изменить аватар</button>
+                        <div class="avatar-container">
+                            <img id="avatar-img" src="https://via.placeholder.com/150?text=No+Avatar" alt="Аватар" class="avatar">
+                            <div class="avatar-overlay">
+                                <label for="avatar-input" class="avatar-upload-btn">
+                                    📷 Загрузить фото
+                                </label>
+                            </div>
+                        </div>
                         <input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="uploadAvatar(event)">
+                        <p class="avatar-hint">Поддерживаются: JPG, PNG, GIF (макс. 5MB)</p>
                     </div>
                     
                     <div class="profile-info">

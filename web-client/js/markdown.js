@@ -95,6 +95,12 @@ function parseMarkdown(text) {
     // Убрать пустые параграфы
     html = html.replace(/<p>\s*<\/p>/g, '');
     
+    // Специальные блоки: >tip, >error, >example
+    html = html.replace(/^>\s*tip:\s*(.+)$/gim, '<div class="tip-box"><p>$1</p></div>');
+    html = html.replace(/^>\s*error:\s*(.+)$/gim, '<div class="error-box"><p>$1</p></div>');
+    html = html.replace(/^>\s*example:\s*(.+)$/gim, '<div class="example-box"><p>$1</p></div>');
+    html = html.replace(/^>\s*(.+)$/gim, '<blockquote>$1</blockquote>'); // Обычные цитаты
+    
     return html;
 }
 
